@@ -1,5 +1,5 @@
 {
-  "name": "SearchThroughHyperlinks",
+  "name": "Search Through Hyperlinks",
   "version": "1.0.0",
   "manifest_version": 2,
   "description": "Search a Word in all the Hyperlinks in a particular URL!",
@@ -16,6 +16,7 @@
     }
   ],
   "browser_action": {
+    "default_icon": "clip150bottom.png",
     "default_title": "SearchThroughHyperlinks"
   },
   "background": {
