@@ -17,7 +17,8 @@
   ],
   "browser_action": {
     "default_icon": "clip150bottom.png",
-    "default_title": "SearchThroughHyperlinks"
+    "default_title": "Search Through Hyperlinks",
+    "default_popup": "popup.html"
   },
   "background": {
     "scripts": ["background.js"],
