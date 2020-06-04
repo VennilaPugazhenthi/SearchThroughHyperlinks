@@ -16,13 +16,10 @@ function setCount(res) {
 
     //Outputs all the hyperlinks in the web page
     var totalLinks = res.len;
-    // document.getElementById("links").innerHTML="";
 
     for (var i = 0; i < totalLinks; i++) {
         var textlink = res.list[i].toString();
         if (textlink.indexOf("http://") == 0 || textlink.indexOf("https://") == 0) {
-            // document.getElementById("links").innerHTML+=res.list[i].toString()+"<br/>";
-
 
             //Create checkboxes for each hyperlinks
             var check = document.createElement("INPUT");
@@ -52,15 +49,21 @@ function setCount(res) {
         var container=document.getElementById("container");
         var checklist=container.children;
         var checkboxesChecked=[];         //Saves all the checked hyperlinks
+        var num_clicked_links=0;
         //If the checkbox is checked, then add it to the array
         for(var j=0;j<res.len;j++){
             if(checklist[j].checked==true){
                 checkboxesChecked.push(checklist[j].id);
+                num_clicked_links=num_clicked_links+1;
+                // alert(checklist[j].id);
             }
         }
-
-
-
+        //Opens the checked hyperlinks in new window
+        for(var k=0; k<num_clicked_links;k++){
+            window.open(checkboxesChecked[k],'_wnd'+k,'_self');
+        }
 
     }
+
+
 }
