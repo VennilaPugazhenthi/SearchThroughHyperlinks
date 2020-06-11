@@ -15,10 +15,6 @@ function setCount(res) {
     div.textContent = res.count.toString() + ' appearance'
     document.body.appendChild(div)
 
-    // var div2=document.createElement('div')
-    // div.textContent = res.new_link.toString()+'appearences!'
-    // document.body.appendChild(div2)
-
     //Outputs all the hyperlinks in the web page
     var totalLinks = res.len;
 
@@ -64,9 +60,13 @@ function setCount(res) {
                 // alert(checklist[j].id);
             }
         }
-        //Opens the checked hyperlinks in new window
+        //Opens the checked hyperlinks
         for(var k=0; k<num_clicked_links;k++){
-            window.open(checkboxesChecked[k],'_wnd'+k,'_self');
+            //Opens the checked hyperlinks in new tabs in same window
+            chrome.tabs.create({url:checkboxesChecked[k]});
+
+            //Opens the checked hyperlinks in new window
+            // window.open(checkboxesChecked[k],'_wnd'+k,'_self');
         }
 
     }
