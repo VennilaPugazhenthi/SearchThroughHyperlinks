@@ -25,6 +25,7 @@
     "persistent": false
   },
   "permissions": ["tabs",
-  "contextMenus"
+  "contextMenus",
+    "webNavigation"
   ]
 }

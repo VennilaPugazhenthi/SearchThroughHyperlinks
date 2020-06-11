@@ -13,8 +13,11 @@ function setCount(res) {
     //Outputs number of appearance
     const div = document.createElement('div')
     div.textContent = res.count.toString() + ' appearance'
-
     document.body.appendChild(div)
+
+    // var div2=document.createElement('div')
+    // div.textContent = res.new_link.toString()+'appearences!'
+    // document.body.appendChild(div2)
 
     //Outputs all the hyperlinks in the web page
     var totalLinks = res.len;
@@ -44,6 +47,7 @@ function setCount(res) {
     }
     //Creates button at the end of the list
     var go = document.createElement("BUTTON");
+    go.id="go";
     go.innerText = "Go!";
     document.body.appendChild(go);
     //A function to save all the checked hyperlinks to an array
