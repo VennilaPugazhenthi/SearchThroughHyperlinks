@@ -2,6 +2,10 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
     //Finds the matches of the searched word
     const re = new RegExp(request,'gi')
     const matches = document.documentElement.innerText.match(re)
+    console.log("The correct numer of matches is:",matches.length);
+    for(var j in matches){
+        console.log("the matches in current website",matches[j]);
+    }
 
     //Highlights the matched words to light yellow color excluding the tags but also highlights the functions of html
     // var match= new RegExp(request+"(?![^<>]*>)","gi");
@@ -47,84 +51,95 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
     var x= document.querySelectorAll("a");
     var myarray = []
     for (var i=0;i<x.length; i++){
-        var nametext=x[i].textContent;
-        var cleantext= nametext.replace(/\s+/g,' ').trim();
-        var cleanlink= x[i].href;
-        // myarray.push([cleantext,cleanlink]);
-        myarray.push(cleanlink);
+        var href_validility=x[i].href.toString();
+        if(href_validility.indexOf("http://")==0||href_validility.indexOf("https://")==0){
+            var nametext=x[i].textContent;
+            var cleantext= nametext.replace(/\s+/g,' ').trim();
+            var cleanlink= x[i].href;
+            // myarray.push([cleantext,cleanlink]);
+            myarray.push(cleanlink);
+        }
     }
 
+    //XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+    // OPEN - type, url/file, async
+    xhr.open("GET",myarray[1],true);
+    console.log("The searched website is",myarray[1]);
 
-    // var xhr = new XMLHttpRequest();
-    // // OPEN - type, url/file, async
-    // xhr.open("GET",myarray[1],true);
-    //
-    // xhr.onreadystatechange = function(){
-    //     console.log("READYSTATE: ",xhr.readyState);
-    //     if(this.readyState == 4 && this.status == 200){
-    //         console.log("Inside the xhr");
-    //         var response= this.responseText;
-    //
-    //         var parse = new DOMParser();
-    //
-    //         var html_new = parse.parseFromString(response,'text/html');
-    //         console.log(html_new);
-    //         var match_new=html_new.documentElement.innerText.match(re);
-    //
-    //         var appear;
-    //
-    //         //Error Handling for appearence in list of links
-    //         try{
-    //             appear=match_new.length;
-    //         }catch (err) {
-    //             if(err instanceof TypeError){
-    //                 appear=0;
-    //             }else{
-    //                 appear=0;
-    //             }
-    //         }
-    //
-    //         console.log("The appearence of searched word in new website is:",appear.toString());
-    //     }
-    // }
-    // xhr.send();
 
-    var numarray=[];
-    for(var k=0; k<x.length; k++){
-        var xhr = new XMLHttpRequest();
-        // OPEN - type, url/file, async
-        xhr.open("GET",myarray[k],true);
+    xhr.onreadystatechange = function(){
+        console.log("READYSTATE: ",xhr.readyState);
+        if(this.readyState == 4 && this.status == 200){
+            console.log("Inside the xhr");
+            var response= this.response;
 
-        xhr.onreadystatechange = function(){
-            // console.log("READYSTATE: ",xhr.readyState);
-            if(this.readyState == 4 && this.status == 200){
-                // console.log("Inside the xhr");
-                var response= this.responseText;
+            var parse = new DOMParser();
 
-                var parse = new DOMParser();
+            var html_new = parse.parseFromString(response,'text/html');
+            console.log(html_new);
+            var match_new=html_new.documentElement.innerText.match(re);
 
-                var html_new = parse.parseFromString(response,'text/html');
-                console.log(html_new);
-                var match_new=html_new.documentElement.innerText.match(re);
+            var appear;
 
-                var appear;
-
-                //Error Handling for appearence in list of links
-                try{
-                    appear=match_new.length;
-                }catch (err) {
-                    if(err instanceof TypeError){
-                        appear=0;
-                    }else{
-                        appear=0;
-                    }
+            //Error Handling for appearence in list of links
+            try{
+                appear=match_new.length;
+            }catch (err) {
+                if(err instanceof TypeError){
+                    appear=0;
+                }else{
+                    appear=0;
                 }
-                console.log("The appearence of searched word in new website is:",myarray[k],appear.toString());
-                numarray.push(appear);
+            }
+
+            console.log("The appearence of searched word in new website is:",appear.toString());
+            for(var k in match_new){
+                console.log("the word:",match_new[k]);
             }
         }
-        xhr.send();
     }
+
+    xhr.send();
+
+    // var numarray=[];
+    // for(var k=0; k<x.length; k++){
+    //     var xhr = new XMLHttpRequest();
+    //     // OPEN - type, url/file, async
+    //     xhr.open("GET",myarray[k],true);
+    //
+    //     xhr.onreadystatechange = function(){
+    //         // console.log("READYSTATE: ",xhr.readyState);
+    //         if(this.readyState == 4 && this.status == 200){
+    //             // console.log("Inside the xhr");
+    //             var response= this.responseText;
+    //
+    //             var parse = new DOMParser();
+    //
+    //             var html_new = parse.parseFromString(response,'text/html');
+    //             console.log(html_new);
+    //             var match_new=html_new.documentElement.innerText.match(re);
+    //
+    //
+    //
+    //             var appear;
+    //
+    //             //Error Handling for appearence in list of links
+    //             try{
+    //                 appear=match_new.length;
+    //             }catch (err) {
+    //                 if(err instanceof TypeError){
+    //                     appear=0;
+    //                 }else{
+    //                     appear=0;
+    //                 }
+    //             }
+    //             console.log("The appearence of searched word in new website is:",myarray[k],appear.toString());
+    //             numarray.push(appear);
+    //         }
+    //     }
+    //     xhr.send();
+    // }
 
 
     // readyState value
