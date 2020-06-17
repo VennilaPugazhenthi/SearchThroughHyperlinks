@@ -3,9 +3,32 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
     const re = new RegExp(request,'gi')
     const matches = document.documentElement.innerText.match(re)
     console.log("The correct numer of matches is:",matches.length);
-    for(var j in matches){
-        console.log("the matches in current website",matches[j]);
-    }
+    // for(var j in matches){
+    //     console.log("the matches in current website",matches[j]);
+    // }
+
+    // var matches=[];
+    // var match_old = document.documentElement.innerText.split(".");
+    // for (var i in match_old){
+    //
+    //     var temp = match_old[i].match(re);
+    //     for(var j in temp){
+    //         if(temp!=null){
+    //             console.log("Actual sentence of current website:",match_old[i]);
+    //             console.log("grabbed match of current website:",temp);
+    //             matches.push(temp);
+    //         }
+    //     }
+    // }
+
+    console.log("The correct numer of matches is:",matches.length);
+    // for(var j in matches){
+    //     console.log("the matches in current website",matches[j]);
+    // }
+
+
+
+
 
     //Highlights the matched words to light yellow color excluding the tags but also highlights the functions of html
     // var match= new RegExp(request+"(?![^<>]*>)","gi");
@@ -39,9 +62,11 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
         var div = document.createElement("span");
         parent.replaceChild(div,node);
         div.innerHTML = node.data.replace(re, function (match) {
-            // return "<mark style='background-color:#FFFF99;'>"+match+"</mark>";
             count_color=count_color+1;
-            return "<mark style='background-color:#008000;'>"+match+"</mark>";
+            // return "<mark style='background-color:#FFFF99;'>"+match+"</mark>";
+            return "<mark style='background-color:#FAED27;'>"+match+"</mark>";
+
+            // return "<mark style='background-color:#008000;'>"+match+"</mark>";
         });
     }
     //Logs number of highlights
@@ -61,12 +86,25 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
         }
     }
 
+    // //Using Fetch()
+    // fetch(myarray[1]).then(response =>{
+    //    console.log(response);
+    //    return response.text(); //The API call was successful!
+    // }).then(function (html) {
+    //     var parser = new DOMParser();
+    //     var doc = parser.parseFromString(html,'text/html');
+    //
+    //     var match_new = doc.documentElement.innerText.match(re);
+    //     console.log("The match found using the fetch API",match_new.length.toString());
+    // }).catch(function (err) {
+    //     console.warn('Something went wrong.',err);
+    // });
+
     //XMLHttpRequest
     var xhr = new XMLHttpRequest();
     // OPEN - type, url/file, async
     xhr.open("GET",myarray[1],true);
     console.log("The searched website is",myarray[1]);
-
 
     xhr.onreadystatechange = function(){
         console.log("READYSTATE: ",xhr.readyState);
@@ -76,31 +114,69 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
 
             var parse = new DOMParser();
 
-            var html_new = parse.parseFromString(response,'text/html');
+            var html_new = parse.parseFromString(this.response,'text/html');
             console.log(html_new);
-            var match_new=html_new.documentElement.innerText.match(re);
+            // var match_new=html_new.documentElement.innerText.match(re);
 
-            var appear;
+            // var match_new=[];
+            //
+            // var match = html_new.documentElement.innerText.split(".");
+            // for (var i in match){
+            //
+            //     var temp = match[i].match(re);
+            //     for(var j in temp){
+            //         if(temp!=null){
+            //             console.log("Sentence of next website:",match[i]);
+            //             console.log("Grabbed match of next website:",temp);
+            //             match_new.push(temp);
+            //         }
+            //     }
+            //
+            // }
 
-            //Error Handling for appearence in list of links
-            try{
-                appear=match_new.length;
-            }catch (err) {
-                if(err instanceof TypeError){
-                    appear=0;
-                }else{
-                    appear=0;
+            var parents_new=[];
+            var children_new=[];
+
+            //Find all text nodes, and add their parents to a list
+            recursiveFindTextNodes(0,html_new.body,function (parent, node) {
+                if(node.data.match(re)){
+                    parents_new.push(parent);
+                    children_new.push(node);
                 }
+            });
+            var count_appearence=0;
+            for(let i=0; i< parents_new.length; i++){
+                var parent = parents_new[i];
+                var node = children_new[i];
+                div.innerHTML = node.data.replace(re, function (match) {
+                    count_appearence=count_appearence+1;
+                });
             }
+            console.log("The appearence in new wwebsite is:",count_appearence.toString());
 
-            console.log("The appearence of searched word in new website is:",appear.toString());
-            for(var k in match_new){
-                console.log("the word:",match_new[k]);
-            }
+            //
+            // var appear;
+            //
+            // //Error Handling for appearence in list of links
+            // try{
+            //     appear=match_new.length;
+            // }catch (err) {
+            //     if(err instanceof TypeError){
+            //         appear=0;
+            //     }else{
+            //         appear=0;
+            //     }
+            // }
+            //
+            // console.log("The appearence of searched word in new website is:",appear.toString());
+            // for(var k in match_new){
+            //     console.log("the word:",match_new[k]);
+            // }
         }
     }
 
     xhr.send();
+
 
     // var numarray=[];
     // for(var k=0; k<x.length; k++){
@@ -173,9 +249,13 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
 
 function recursiveFindTextNodes(parent, node, func) {
     // nodeType 3 designates text
-    if(parent && node.nodeType === 3){
-        // Pass the text node and its parent to the handler function
-        func(parent, node);
+    if(parent && node.nodeType === 3 ){
+        if(parent.tagName!=="SCRIPT" && parent.tagName!=="STYLE" && parent.tagName!=="IFRAME" && parent.tagName !=="CANVAS"
+        && parent.tagName!=="META"){
+            // console.log("The tag name:", parent.tagName);
+            // Pass the text node and its parent to the handler function
+            func(parent, node);
+        }
     }else{
         // Loop through children and make recursive calls
         for(let i=0; i<node.childNodes.length; i++){
