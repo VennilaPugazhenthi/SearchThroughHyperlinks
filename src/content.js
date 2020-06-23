@@ -104,6 +104,9 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
     //
     // xhr.send();
 
+    //FOR BACKGROUND.JS
+    // chrome.runtime.sendMessage({array:myarray,len:x.length,re:re},function (response) {
+    // });
 
     var numarray=[];
     for(var k=0; k<x.length; k++){
@@ -147,12 +150,13 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
 
             }
         }
-        xhr.send();
+      xhr.send();
+
     }
 
 
+
     sendResponse({count: appear_current,list:myarray,len:x.length})
-    // sendResponse({count: matches.length,list:myarray,len:x.length,list_num:numarray})
 })
 
 function recursiveFindTextNodes(parent, node, func) {

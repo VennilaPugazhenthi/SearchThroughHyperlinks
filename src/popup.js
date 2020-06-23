@@ -1,5 +1,10 @@
-document.getElementById("press").addEventListener("click",clicked);
+document.addEventListener('DOMContentLoaded',function () {
+    var btn = document.getElementById("press");
+    btn.addEventListener("click",clicked);
+});
+// document.getElementById("press").addEventListener("click",clicked);
 function clicked() {
+    console.log("Inside popup.js");
     var val=document.getElementById("findInput").value;
 
 
@@ -10,10 +15,12 @@ function clicked() {
 }
 
 function setCount(res) {
+
     //Outputs number of appearance
     const div = document.createElement('div')
     div.textContent = res.count.toString() + ' appearance'
     document.body.appendChild(div)
+
 
     //Outputs all the hyperlinks in the web page
     var totalLinks = res.len;
@@ -66,35 +73,7 @@ function setCount(res) {
             //Opens the checked hyperlinks in new tabs in same window
             chrome.tabs.create({url:checkboxesChecked[k]});
 
-
-            // chrome.windows.create({url:checkboxesChecked[k]});
-
-
-            // if(k>1){
-            //     if(windowCreated==0){
-            //         chrome.windows.create({url:checkboxesChecked[k]});
-            //
-            //         chrome.windows.onCreated.addListener((window)=>{
-            //             console.log("New window:"+window.id);
-            //             windowCreatedID=window.id;
-            //             alert(windowCreatedID.toString());
-            //         });
-            //
-            //         windowCreated=1;
-            //     }else{
-            //
-            //         chrome.tabs.create({windowId:windowCreatedID,url:checkboxesChecked[k]});
-            //     }
-            //
-            // }else {
-            //     chrome.tabs.create({url:checkboxesChecked[k]});
-            // }
-
-            //Opens the checked hyperlinks in new window
-            // window.open(checkboxesChecked[k],'_wnd'+k,'_self');
         }
-
     }
-
 
 }
