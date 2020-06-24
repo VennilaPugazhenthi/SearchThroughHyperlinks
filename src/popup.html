@@ -13,14 +13,35 @@
             background-color: yellow;
             color: black;
         }
+        table{
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table,td,th{
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th,td{
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
 
 <input type="text" id="findInput" placeholder="Search...">
 <button id="press">Find</button>
-<p id="links"></p>
+
 <p id="container"></p>
+<p id="displayTable"></p>
+<!--<table id="displayTable">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th><input type="checkbox" id="SelectAll" name="SelectAll"></th>-->
+<!--        <th>Hyperlinks</th>-->
+<!--        <th>Appearances</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--</table>-->
 
 <script src="popup.js" charset="utf-8"></script>
 </body>

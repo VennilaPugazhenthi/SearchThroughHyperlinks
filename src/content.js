@@ -47,7 +47,7 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
         div.innerHTML = node.data.replace(re, function (match) {
             count_color=count_color+1;
             // return "<mark style='background-color:#FFFF99;'>"+match+"</mark>";
-            return "<mark style='background-color:#FAED27;'>"+match+"</mark>";
+            return "<mark style='background-color:#FFF34D; border-radius: 5px;'>"+match+"</mark>";
             // return "<mark style='background-color:#008000;'>"+match+"</mark>";
         });
     }
