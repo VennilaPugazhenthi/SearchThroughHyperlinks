@@ -40,8 +40,10 @@ function setCount(res) {
 
 }
 var totalLinks=0;
-chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
 
+
+chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
+        // totalLinks+=1;
         if(totalLinks!==message.limit-1){
 
             var textlink = message.url;
@@ -53,6 +55,11 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
 
             var td = document.createElement('td');
 
+            // //NEW
+            // var tblBody=document.createElement("tbody");
+            // var row= document.createElement("tr");
+
+
             td=tr.insertCell(0);
             //Create checkboxes for each hyperlinks
             var check = document.createElement("INPUT");
@@ -60,25 +67,38 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
             check.id = textlink;
             td.appendChild(check);
 
+            //NEW
+            // var cell0=document.createElement("td");
+            // cell0.appendChild(check);
+            // row.appendChild(cell0);
+
 
             td=tr.insertCell(1);
             //Create label for each checkboxes for each hyperlinks
             var label = document.createElement("a");
-            // label.setAttribute('for', textlink);
             label.setAttribute('href',textlink);
             label.setAttribute('style',"color:#0000FF;")
             label.appendChild(document.createTextNode(textlink));
             td.appendChild(label);
 
+            // //NEW
+            // var cell1=document.createElement("td");
+            // cell1.appendChild(label);
+            // row.appendChild(cell1);
+
             td=tr.insertCell(2);
-            td.appendChild(document.createTextNode(value));
+            var num = document.createElement('num');
+            num.innerHTML = value;
+            td.appendChild(num);
 
+            // //NEW
+            // var cell2=document.createElement("td");
+            // cell2.appendChild(num);
+            // row.appendChild(cell2);
+            //
+            // tblBody.appendChild(row);
+            // empTable.appendChild(tblBody);
 
-            // Lists all the hyperlinks as checkboxes with linebreak between each of them
-            // container.appendChild(check);
-            // container.appendChild(label);
-            // linebreak = document.createElement("br");
-            // container.appendChild(linebreak);
 
             totalLinks+=1;
         }else{
@@ -91,6 +111,11 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
 
             var td = document.createElement('td');
 
+            // //NEW
+            // var tblBody=document.getElementsByTagName("tbody");
+            // var row= document.createElement("tr");
+
+
             td=tr.insertCell(0);
             //Create checkboxes for each hyperlinks
             var check = document.createElement("INPUT");
@@ -98,30 +123,81 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
             check.id = textlink;
             td.appendChild(check);
 
+            // //NEW
+            // var cell0=document.createElement("td");
+            // cell0.appendChild(check);
+            // row.appendChild(cell0);
+
             td=tr.insertCell(1);
             //Create label for each checkboxes for each hyperlinks
             var label = document.createElement("a");
-            // label.setAttribute('for', textlink);
             label.setAttribute('href',textlink);
             label.setAttribute('style',"color:#0000FF;")
             label.appendChild(document.createTextNode(textlink));
-            // label.appendChild(document.createTextNode(res.list[i].toString()+res.list_num[i].toString());
             td.appendChild(label);
 
-            td=tr.insertCell(2);
-            td.appendChild(document.createTextNode(value));
+            // //NEW
+            // var cell1=document.createElement("td");
+            // cell1.appendChild(label);
+            // row.appendChild(cell1);
 
-            //Lists all the hyperlinks as checkboxes with linebreak between each of them
-            // container.appendChild(check);
-            // container.appendChild(label);
-            // linebreak = document.createElement("br");
-            // container.appendChild(linebreak);
+            td=tr.insertCell(2);
+            var num = document.createElement('num');
+            num.innerHTML = value;
+            td.appendChild(num);
+
+            // //NEW
+            // var cell2=document.createElement("td");
+            // cell2.appendChild(num);
+            // row.appendChild(cell2);
+            //
+            // tblBody.appendChild(row);
+
             totalLinks+=1;
+            // alert("SORT")
+            var sort = document.createElement("BUTTON");
+            sort.id="sort";
+            sort.innerText="Sort";
+            sort.setAttribute('style','float:left;');
+            document.body.appendChild(sort);
+            sort.onclick= function sorting() {
+                var table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementById('empTable');
+                switching=true;
+
+                while(switching){
+                    switching= false;
+                    rows=table.rows;
+                    // alert(rows.length-1);
+                    for(i=1;i<(rows.length-1);i++){
+                        shouldSwitch=false;
+
+
+                        x = rows[i].getElementsByTagName("TD")[2];
+                        y = rows[i+1].getElementsByTagName("TD")[2];
+                        // alert(table.rows[i].cells[2].innerHTML);
+                        // alert(x.innerHTML);
+                        if(x.innerHTML>y.innerHTML){
+                            // alert("IF");
+                            shouldSwitch=true;
+                            break;
+                        }
+                    }
+                    if(shouldSwitch){
+
+                        rows[i].parentNode.insertBefore(rows[i+1],rows[i]);
+                        switching=true;
+                    }
+                }
+                // // alert(change);
+
+            }
 
             //Creates button at the end of the list
             var go = document.createElement("BUTTON");
             go.id="go";
-            go.innerText = "Go!";
+            go.innerText = "Open";
+            go.setAttribute('style','float:right;')
             document.body.appendChild(go);
             //A function to save all the checked hyperlinks to an array
             go.onclick = function respond () {
@@ -140,12 +216,8 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
                 for(var j=0;j<total;j++){
                     if(checklist[j].checked==true){
                         checkboxesChecked.push(checklist[j].id);
-                        // alert(checklist[j].id);
                         num_clicked_links=num_clicked_links+1;
 
-                        // checkboxesChecked.push(checklist[j].id);
-                        // num_clicked_links=num_clicked_links+1;
-                        // alert(checklist[j].id);
                     }
                 }
                 //Opens the checked hyperlinks

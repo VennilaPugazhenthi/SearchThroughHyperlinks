@@ -24,24 +24,24 @@
         th,td{
             padding: 5px;
         }
+        #Search{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
 
-<input type="text" id="findInput" placeholder="Search...">
-<button id="press">Find</button>
+<div id="Search">
+    <input type="text" id="findInput" placeholder="Search...">
+    <button id="press">Find</button>
+</div>
+
 
 <p id="container"></p>
 <p id="displayTable"></p>
-<!--<table id="displayTable">-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--        <th><input type="checkbox" id="SelectAll" name="SelectAll"></th>-->
-<!--        <th>Hyperlinks</th>-->
-<!--        <th>Appearances</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--</table>-->
+
 
 <script src="popup.js" charset="utf-8"></script>
 </body>
