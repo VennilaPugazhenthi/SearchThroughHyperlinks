@@ -2,9 +2,9 @@ document.addEventListener('DOMContentLoaded',function () {
     var btn = document.getElementById("press");
     btn.addEventListener("click",clicked);
 });
-// document.getElementById("press").addEventListener("click",clicked);
+
 function clicked() {
-    console.log("Inside popup.js");
+
     var val=document.getElementById("findInput").value;
 
 
@@ -22,58 +22,145 @@ function setCount(res) {
     document.body.appendChild(div)
 
 
-    //Outputs all the hyperlinks in the web page
-    var totalLinks = res.len;
+    // //Outputs all the hyperlinks in the web page
+    // var totalLinks = res.len;
+    //
+    // for (var i = 0; i < totalLinks; i++) {
+    //     var textlink = res.list[i].toString();
+    //     if (textlink.indexOf("http://") == 0 || textlink.indexOf("https://") == 0) {
+    //
+    //         //Create checkboxes for each hyperlinks
+    //         var check = document.createElement("INPUT");
+    //         check.setAttribute("type", "checkbox");
+    //         check.id = res.list[i].toString();
+    //
+    //         //Create label for each checkboxes for each hyperlinks
+    //         var label = document.createElement("label");
+    //         label.setAttribute('for', res.list[i].toString());
+    //         label.appendChild(document.createTextNode(res.list[i].toString()));
+    //         // label.appendChild(document.createTextNode(res.list[i].toString()+res.list_num[i].toString());
+    //
+    //         //Lists all the hyperlinks as checkboxes with linebreak between each of them
+    //         container.appendChild(check);
+    //         container.appendChild(label);
+    //         linebreak = document.createElement("br");
+    //         container.appendChild(linebreak);
+    //     }
+    // }
+    // //Creates button at the end of the list
+    // var go = document.createElement("BUTTON");
+    // go.id="go";
+    // go.innerText = "Go!";
+    // document.body.appendChild(go);
+    // //A function to save all the checked hyperlinks to an array
+    // go.onclick = function respond () {
+    //     var container=document.getElementById("container");
+    //     var checklist=container.children;
+    //     var checkboxesChecked=[];         //Saves all the checked hyperlinks
+    //     var num_clicked_links=0;
+    //     //If the checkbox is checked, then add it to the array
+    //     for(var j=0;j<res.len;j++){
+    //         if(checklist[j].checked==true){
+    //             checkboxesChecked.push(checklist[j].id);
+    //             num_clicked_links=num_clicked_links+1;
+    //             // alert(checklist[j].id);
+    //         }
+    //     }
+    //     //Opens the checked hyperlinks
+    //     var windowCreated=0;
+    //     var windowCreatedID;
+    //     for(var k=0; k<num_clicked_links;k++){
+    //         //Opens the checked hyperlinks in new tabs in same window
+    //         chrome.tabs.create({url:checkboxesChecked[k]});
+    //
+    //     }
+    // }
 
-    for (var i = 0; i < totalLinks; i++) {
-        var textlink = res.list[i].toString();
-        if (textlink.indexOf("http://") == 0 || textlink.indexOf("https://") == 0) {
+}
+var totalLinks=0;
+chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
+    // const div2 = document.createElement('div2')
+    // div2.textContent = message.value.toString() + ' APPEARENCE'
+    // document.body.appendChild(div2)
+    // sendResponse("SUCCESS");
+        if(totalLinks!==message.limit-1){
+            var textlink = message.url;
+            var value = message.num;
 
             //Create checkboxes for each hyperlinks
             var check = document.createElement("INPUT");
             check.setAttribute("type", "checkbox");
-            check.id = res.list[i].toString();
+            check.id = textlink;
 
             //Create label for each checkboxes for each hyperlinks
             var label = document.createElement("label");
-            label.setAttribute('for', res.list[i].toString());
-            label.appendChild(document.createTextNode(res.list[i].toString()));
+            label.setAttribute('for', textlink);
+            label.appendChild(document.createTextNode(textlink+' '+value));
             // label.appendChild(document.createTextNode(res.list[i].toString()+res.list_num[i].toString());
+
 
             //Lists all the hyperlinks as checkboxes with linebreak between each of them
             container.appendChild(check);
             container.appendChild(label);
             linebreak = document.createElement("br");
             container.appendChild(linebreak);
-        }
-    }
-    //Creates button at the end of the list
-    var go = document.createElement("BUTTON");
-    go.id="go";
-    go.innerText = "Go!";
-    document.body.appendChild(go);
-    //A function to save all the checked hyperlinks to an array
-    go.onclick = function respond () {
-        var container=document.getElementById("container");
-        var checklist=container.children;
-        var checkboxesChecked=[];         //Saves all the checked hyperlinks
-        var num_clicked_links=0;
-        //If the checkbox is checked, then add it to the array
-        for(var j=0;j<res.len;j++){
-            if(checklist[j].checked==true){
-                checkboxesChecked.push(checklist[j].id);
-                num_clicked_links=num_clicked_links+1;
-                // alert(checklist[j].id);
+            totalLinks+=1;
+        }else{
+            var textlink = message.url;
+            var value = message.num;
+
+            //Create checkboxes for each hyperlinks
+            var check = document.createElement("INPUT");
+            check.setAttribute("type", "checkbox");
+            check.id = textlink;
+
+            //Create label for each checkboxes for each hyperlinks
+            var label = document.createElement("label");
+            label.setAttribute('for', textlink);
+            label.appendChild(document.createTextNode(textlink+' '+value));
+            // label.appendChild(document.createTextNode(res.list[i].toString()+res.list_num[i].toString());
+
+
+            //Lists all the hyperlinks as checkboxes with linebreak between each of them
+            container.appendChild(check);
+            container.appendChild(label);
+            linebreak = document.createElement("br");
+            container.appendChild(linebreak);
+            totalLinks+=1;
+            //Creates button at the end of the list
+            var go = document.createElement("BUTTON");
+            go.id="go";
+            go.innerText = "Go!";
+            document.body.appendChild(go);
+            //A function to save all the checked hyperlinks to an array
+            go.onclick = function respond () {
+                var container=document.getElementById("container");
+                var checklist=container.children;
+                // var checklist = container.getAttribute("type");
+                var total = totalLinks*3;
+
+
+                var checkboxesChecked=[];         //Saves all the checked hyperlinks
+                var num_clicked_links=0;
+                //If the checkbox is checked, then add it to the array
+                for(var j=0;j<total;j++){
+                    if(checklist[j].checked==true){
+                        checkboxesChecked.push(checklist[j].id);
+                        num_clicked_links=num_clicked_links+1;
+                        // alert(checklist[j].id);
+                    }
+                }
+                //Opens the checked hyperlinks
+                var windowCreated=0;
+                var windowCreatedID;
+                for(var k=0; k<num_clicked_links;k++){
+                    //Opens the checked hyperlinks in new tabs in same window
+                    chrome.tabs.create({url:checkboxesChecked[k]});
+
+                }
             }
         }
-        //Opens the checked hyperlinks
-        var windowCreated=0;
-        var windowCreatedID;
-        for(var k=0; k<num_clicked_links;k++){
-            //Opens the checked hyperlinks in new tabs in same window
-            chrome.tabs.create({url:checkboxesChecked[k]});
 
-        }
-    }
 
-}
+
+})

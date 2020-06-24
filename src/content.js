@@ -18,6 +18,11 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
         }
     }
 
+    // chrome.runtime.sendMessage({
+    //     value:appear_current
+    // },function (response) {
+    //     console.log(response);
+    // });
 
     // Highlights the matched words that are just text
     var parents=[];
@@ -109,6 +114,12 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
     // });
 
     var numarray=[];
+    // chrome.runtime.sendMessage({
+    //    limit:x.length
+    // },function (response) {
+    //     console.log(response);
+    // });
+    var max = x.length;
     for(var k=0; k<x.length; k++){
         var xhr = new XMLHttpRequest();
         // OPEN - type, url/file, async
@@ -148,13 +159,25 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
                 //Displays the website and appearence number together async
                 console.log("The appearence in new website is:",this.responseURL.toString(),count_appearence.toString());
 
+                chrome.runtime.sendMessage({
+                    url:this.responseURL.toString(),
+                    num:count_appearence.toString(),
+                    type:"appear",
+                    limit:max
+                },function (response) {
+                    console.log(response);
+                });
+
             }
         }
       xhr.send();
 
     }
-
-
+    // chrome.runtime.sendMessage({
+    //    type:"end"
+    // },function (response) {
+    //     console.log(response);
+    // });
 
     sendResponse({count: appear_current,list:myarray,len:x.length})
 })
