@@ -63,9 +63,11 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
 
             td=tr.insertCell(1);
             //Create label for each checkboxes for each hyperlinks
-            var label = document.createElement("label");
-            label.setAttribute('for', textlink);
-            label.appendChild(document.createTextNode(textlink+' '+value));
+            var label = document.createElement("a");
+            // label.setAttribute('for', textlink);
+            label.setAttribute('href',textlink);
+            label.setAttribute('style',"color:#0000FF;")
+            label.appendChild(document.createTextNode(textlink));
             td.appendChild(label);
 
             td=tr.insertCell(2);
@@ -98,9 +100,11 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
 
             td=tr.insertCell(1);
             //Create label for each checkboxes for each hyperlinks
-            var label = document.createElement("label");
-            label.setAttribute('for', textlink);
-            label.appendChild(document.createTextNode(textlink+' '+value));
+            var label = document.createElement("a");
+            // label.setAttribute('for', textlink);
+            label.setAttribute('href',textlink);
+            label.setAttribute('style',"color:#0000FF;")
+            label.appendChild(document.createTextNode(textlink));
             // label.appendChild(document.createTextNode(res.list[i].toString()+res.list_num[i].toString());
             td.appendChild(label);
 
@@ -121,11 +125,14 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
             document.body.appendChild(go);
             //A function to save all the checked hyperlinks to an array
             go.onclick = function respond () {
-                var container=document.getElementById("container");
-                var checklist=container.children;
-                // var checklist = container.getAttribute("type");
-                var total = totalLinks*3;
+                // var container=document.getElementById("container");
 
+                var grid = document.getElementById('empTable');
+                var checklist = grid.getElementsByTagName("INPUT");
+                // var checklist=container.children;
+
+                // var total = totalLinks*3;
+                var total = totalLinks;
 
                 var checkboxesChecked=[];         //Saves all the checked hyperlinks
                 var num_clicked_links=0;
@@ -133,7 +140,11 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
                 for(var j=0;j<total;j++){
                     if(checklist[j].checked==true){
                         checkboxesChecked.push(checklist[j].id);
+                        // alert(checklist[j].id);
                         num_clicked_links=num_clicked_links+1;
+
+                        // checkboxesChecked.push(checklist[j].id);
+                        // num_clicked_links=num_clicked_links+1;
                         // alert(checklist[j].id);
                     }
                 }
