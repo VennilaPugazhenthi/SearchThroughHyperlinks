@@ -14,6 +14,7 @@ function clicked() {
             chrome.tabs.sendMessage(tabs[0].id,val,setCount)
         })
 }
+
 function createTable() {
     //Table Headers
     var tableHeader = ['','Hyperlinks','Appearances'];
@@ -34,9 +35,10 @@ function createTable() {
 function setCount(res) {
 
     //Outputs number of appearance
-    const div = document.createElement('div')
+    // const div = document.createElement('div')
+    var div = document.getElementById('current_appearance');
     div.textContent = res.count.toString() + ' appearance'
-    document.body.appendChild(div)
+    // document.body.appendChild(div)
 
 }
 var totalLinks=0;
