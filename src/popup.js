@@ -55,10 +55,6 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
 
             var td = document.createElement('td');
 
-            // //NEW
-            // var tblBody=document.createElement("tbody");
-            // var row= document.createElement("tr");
-
 
             td=tr.insertCell(0);
             //Create checkboxes for each hyperlinks
@@ -66,11 +62,6 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
             check.setAttribute("type", "checkbox");
             check.id = textlink;
             td.appendChild(check);
-
-            //NEW
-            // var cell0=document.createElement("td");
-            // cell0.appendChild(check);
-            // row.appendChild(cell0);
 
 
             td=tr.insertCell(1);
@@ -81,24 +72,13 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
             label.appendChild(document.createTextNode(textlink));
             td.appendChild(label);
 
-            // //NEW
-            // var cell1=document.createElement("td");
-            // cell1.appendChild(label);
-            // row.appendChild(cell1);
 
             td=tr.insertCell(2);
             var num = document.createElement('num');
-            num.innerHTML = value;
+            num.innerText = value;
+            num.id = value;
+            // num.setAttribute('type','number');
             td.appendChild(num);
-
-            // //NEW
-            // var cell2=document.createElement("td");
-            // cell2.appendChild(num);
-            // row.appendChild(cell2);
-            //
-            // tblBody.appendChild(row);
-            // empTable.appendChild(tblBody);
-
 
             totalLinks+=1;
         }else{
@@ -111,9 +91,6 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
 
             var td = document.createElement('td');
 
-            // //NEW
-            // var tblBody=document.getElementsByTagName("tbody");
-            // var row= document.createElement("tr");
 
 
             td=tr.insertCell(0);
@@ -123,11 +100,6 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
             check.id = textlink;
             td.appendChild(check);
 
-            // //NEW
-            // var cell0=document.createElement("td");
-            // cell0.appendChild(check);
-            // row.appendChild(cell0);
-
             td=tr.insertCell(1);
             //Create label for each checkboxes for each hyperlinks
             var label = document.createElement("a");
@@ -136,22 +108,14 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
             label.appendChild(document.createTextNode(textlink));
             td.appendChild(label);
 
-            // //NEW
-            // var cell1=document.createElement("td");
-            // cell1.appendChild(label);
-            // row.appendChild(cell1);
 
             td=tr.insertCell(2);
             var num = document.createElement('num');
-            num.innerHTML = value;
+            num.innerText = value;
+            // num.id = value;
+            // num.setAttribute('type','number');
             td.appendChild(num);
 
-            // //NEW
-            // var cell2=document.createElement("td");
-            // cell2.appendChild(num);
-            // row.appendChild(cell2);
-            //
-            // tblBody.appendChild(row);
 
             totalLinks+=1;
             // alert("SORT")
@@ -175,9 +139,9 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
 
                         x = rows[i].getElementsByTagName("TD")[2];
                         y = rows[i+1].getElementsByTagName("TD")[2];
-                        // alert(table.rows[i].cells[2].innerHTML);
-                        // alert(x.innerHTML);
-                        if(x.innerHTML>y.innerHTML){
+                        // alert(Number(x.innerText));
+                        // alert(x.id);
+                        if(Number(x.innerText)<Number(y.innerText)){
                             // alert("IF");
                             shouldSwitch=true;
                             break;
