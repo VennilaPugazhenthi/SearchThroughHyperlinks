@@ -69,6 +69,9 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
         // OPEN - type, url/file, async
         xhr.open("GET",myarray[k],true);
 
+        var url;
+        var num;
+
         xhr.onreadystatechange = function(){
             if(this.readyState == 4 && this.status == 200){
                 // console.log("Inside the xhr");
@@ -101,17 +104,43 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
 
                 //Displays the website and appearence number together async
                 console.log("The appearence in new website is:",this.responseURL.toString(),count_appearence.toString());
+                // url=this.responseURL.toString();
+                // num=count_appearence.toString();
 
                 chrome.runtime.sendMessage({
                     url:this.responseURL.toString(),
                     num:count_appearence.toString(),
-                    type:"appear",
                     limit:max
                 },function (response) {
                     console.log(response);
                 });
 
             }
+
+            if(this.status==403){
+                // alert('FORBIDDEN');
+                chrome.runtime.sendMessage({
+                    url:this.responseURL.toString(),
+                    num:"0",
+                    limit:max
+                },function (response) {
+                    console.log(response);
+                });
+            }
+
+            if(this.status==404){
+                // alert('PAGE NOT FOUND');
+                chrome.runtime.sendMessage({
+                    url:this.responseURL.toString(),
+                    num:"0",
+                    limit:max
+                },function (response) {
+                    console.log(response);
+                });
+
+            }
+
+
         }
 
       xhr.send();
