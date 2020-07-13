@@ -3,7 +3,6 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
     const re = new RegExp(request,'gi')
     const matches = document.documentElement.innerText.match(re)
 
-
     // Error Handling for appearence of searched word in current web page
     var appear_current;
     try{
@@ -17,7 +16,6 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
             appear_current=0;
         }
     }
-
 
     // Highlights the matched words that are just text
     var parents=[];

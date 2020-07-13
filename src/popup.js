@@ -44,6 +44,12 @@ function setCount(res) {
 var totalLinks=0;
 
 
+// global variables
+var parent = null;            // 'parent' node
+var items = new Array();      // array of 'child' nodes
+var col = 2;                  // column for sorting
+var N = 0;
+
 chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
         // totalLinks+=1;
         if(totalLinks!==message.limit-1){
@@ -156,6 +162,16 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
                     }
                 }
 
+                // parent = document.getElementById('empTable');
+                // col = 2;
+                //
+                // items = parent.rows;
+                // N= items.length-1;
+                //
+                // quicksort(1,N,true);
+
+
+
 
 
             }
@@ -199,3 +215,88 @@ chrome.runtime.onMessage.addListener(function (message,sender,sendResponse) {
         }
 
 })
+
+function quicksort(m,n,desc) {
+    alert('INSIDE QUICKSORT');
+    if(n <= m+1) return;
+
+
+    if((n-m) == 2){
+        if(compare(get(n-1), get(m),desc)){ exchange(i,m);}
+        return;
+    }
+
+    i = m+1;
+    j = n - 1;
+    alert('BEFORE FIRST IF');
+    if(compare(get(m), get(i), desc)) {
+        alert('INSIDE FIRST IF');
+        exchange(i, m);
+        alert('AFTER EXCHANGE');
+    }
+    // console.log('INSIDE POPUP');
+    alert('AFTER FIRST IF');
+    if(compare(get(j), get(m), desc)) {
+        exchange(m, j);
+    }
+    if(compare(get(m), get(i), desc)) {
+        exchange(i, m);
+    }
+
+    alert('BEFORE PIVOT');
+    pivot = get(m);
+
+    while(true) {
+        j--;
+        while(compare(pivot, get(j), desc)){
+            j--;
+        }
+        i++;
+        while(compare(get(i), pivot, desc)){
+            i++;
+        }
+        if(j <= i) {
+            break;
+        }
+        exchange(i, j);
+    }
+
+    exchange(m, j);
+
+    if((j-m) < (n-j)) {
+        quicksort(m, j, desc);
+        quicksort(j+1, n, desc);
+    } else {
+        quicksort(j+1, n, desc);
+        quicksort(m, j, desc);
+    }
+}
+
+function compare(val1, val2, desc)
+{
+    alert('INSIDE COMPARE');
+    return (desc) ? val1 > val2 : val1 < val2;
+}
+
+function exchange(i, j)
+{
+    alert('INSIDE EXCHANGE');
+    // exchange adjacent items
+    parent.insertBefore(items[i], items[j]);
+}
+
+function get(i)
+{
+    alert('INSIDE GET');
+    // var node = items[i].getElementsByTagName("TD")[col];
+    // if(node.childNodes.length == 0) return "";
+    //
+    // // assumes firstChild of node is a textNode
+    // var retval = node.firstChild.nodeValue;
+    // if(parseInt(retval) == retval) return parseInt(retval);
+    // return retval;
+
+    var node = items[i].getElementsByTagName('TD')[col];
+    return Number(node.innerText);
+
+}
