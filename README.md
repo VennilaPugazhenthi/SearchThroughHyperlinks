@@ -6,3 +6,21 @@ searched word. The user can click the "sort" button to arrange the table element
 "open" button to open the selected hyperlinks in new tabs. 
 
 This extension is useful for searching through a documentation. In other words, it is basically a google search within a webpage. 
+
+### Installing
+
+1. Download the src folder from this git repository
+2. Open Chrome 
+3. Open Extension Managment Page
+4. Enable Developer Mode by clicking the toggle switch next to Developer mode
+5. Click the LOAD UNPACKED button and select the extension directory
+
+## Deployment
+
+1. Go to a website that you want to use the extension on
+2. Refresh the webpage
+3. Click on the "Search Through Hyperlinks" extension 
+
+## Built With
+
+* [JavaScript](https://www.javascript.com/) 
