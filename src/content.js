@@ -3,11 +3,11 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
     const re = new RegExp(request,'gi')
     const matches = document.documentElement.innerText.match(re)
 
-    // Error Handling for appearence of searched word in current web page
+    // Error Handling for appearance of searched word in current web page
     var appear_current;
     try{
         appear_current=matches.length;
-        console.log("The correct numer of matches is:",appear_current);
+        console.log("The correct number of matches is:",appear_current);
     }catch (e) {
         if(e instanceof TypeError){
             appear_current=0;
@@ -46,64 +46,52 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
     console.log("Number of highlights:",count_color.toString());
 
     //Extracts all the usefully hyperlinks and pushes it into an array
-    var x= document.querySelectorAll("a");
-    var myarray = []
-    for (var i=0;i<x.length; i++){
-        var href_validility=x[i].href.toString();
+    var extractedLinks= document.querySelectorAll("a");
+    let hyperlinkMap = new Map();
+    for (var i=0;i<extractedLinks.length; i++){
+        var href_validility=extractedLinks[i].href.toString();
         if(href_validility.indexOf("http://")==0||href_validility.indexOf("https://")==0){
-            var nametext=x[i].textContent;
-            var cleantext= nametext.replace(/\s+/g,' ').trim();
-            var cleanlink= x[i].href;
-            // myarray.push([cleantext,cleanlink]);
-            myarray.push(cleanlink);
+            var cleanlink= extractedLinks[i].href;
+            if(!hyperlinkMap.has(cleanlink)){
+                var nametext=extractedLinks[i].textContent;
+                var cleantext= nametext.replace(/\s+/g,' ').trim();
+                hyperlinkMap.set(cleanlink, cleantext);
+            }
         }
     }
 
-    var numarray=[];
+    getCountFromLinks(hyperlinkMap, re);
 
-    var max = x.length;
-    for(var k=0; k<x.length; k++){
+    sendResponse({count: appear_current,list:hyperlinkMap.keys(),len:hyperlinkMap.size})
+
+})
+
+function getCountFromLinks(hyperlinkMap, re){
+    console.log("Inside getCountFromLink()");
+    var max = hyperlinkMap.size;
+    for(let [link, linkText] of hyperlinkMap){
         var xhr = new XMLHttpRequest();
-        // OPEN - type, url/file, async
-        xhr.open("GET",myarray[k],true);
-
-        var url;
-        var num;
+        xhr.open("GET",link,true);
 
         xhr.onreadystatechange = function(){
             if(this.readyState == 4 && this.status == 200){
-                // console.log("Inside the xhr");
                 var response= this.responseText;
 
                 var parse = new DOMParser();
 
                 var html_new = parse.parseFromString(response,'text/html');
 
-                var parents_new=[];
-                var children_new=[];
-
+                var count_appearence=0;
                 //Find all text nodes, and add their parents to a list
                 recursiveFindTextNodes(0,html_new.body,function (parent, node) {
                     if(node.data.match(re)){
-                        parents_new.push(parent);
-                        children_new.push(node);
+                       count_appearence++;
                     }
                 });
 
-                var count_appearence=0;
-                for(let i=0; i< parents_new.length; i++){
-                    var parent = parents_new[i];
-                    var node = children_new[i];
-                    div.innerHTML = node.data.replace(re, function (match) {
-                        count_appearence=count_appearence+1;
-                    });
-                }
-                // console.log("The appearence in new website is:",myarray[k],count_appearence.toString());
 
-                //Displays the website and appearence number together async
-                console.log("The appearence in new website is:",this.responseURL.toString(),count_appearence.toString());
-                // url=this.responseURL.toString();
-                // num=count_appearence.toString();
+                //Displays the website and appearance number together async
+                console.log("The appearance in new website is:",this.responseURL.toString(),count_appearence.toString());
 
                 chrome.runtime.sendMessage({
                     url:this.responseURL.toString(),
@@ -140,15 +128,9 @@ chrome.runtime.onMessage.addListener(function (request,sender, sendResponse) {
 
 
         }
-
-      xhr.send();
-
-
+        xhr.send();
     }
-
-    sendResponse({count: appear_current,list:myarray,len:x.length})
-
-})
+}
 
 function recursiveFindTextNodes(parent, node, func) {
     // nodeType 3 designates text
