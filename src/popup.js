@@ -57,86 +57,17 @@ var col = 2;                  // column for sorting
 var N = 0;
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-
+    var url = message.url;
+    var urlTitle = message.urlTitle;
+    var occurrence = message.num;
+    if (!urlTitle) {
+        urlTitle = url;
+    }
     if (totalLinks !== message.limit - 1) {
-        var url = message.url;
-        var urlTitle = message.urlTitle;
-        if(!urlTitle){
-            urlTitle = url;
-        }
-        var value = message.num;
-
-        var empTable = document.getElementById('empTable');
-        var rowCount = empTable.rows.length;
-        var tr = empTable.insertRow(rowCount);
-
-        var td = document.createElement('td');
-
-
-        td = tr.insertCell(0);
-        //Create checkboxes for each hyperlinks
-        var check = document.createElement("INPUT");
-        check.setAttribute("type", "checkbox");
-        check.id = url;
-        td.appendChild(check);
-
-
-        td = tr.insertCell(1);
-        //Create label for each checkboxes for each hyperlinks
-        var label = document.createElement("a");
-        label.setAttribute('href', url);
-        label.setAttribute('style', "color:#0000FF;")
-        label.appendChild(document.createTextNode(urlTitle));
-        td.appendChild(label);
-
-
-        td = tr.insertCell(2);
-        var num = document.createElement('num');
-        num.innerText = value;
-        num.id = value;
-        // num.setAttribute('type','number');
-        td.appendChild(num);
-
+        insertRow(url, urlTitle, occurrence);
         totalLinks += 1;
     } else {
-        var url = message.url;
-        var urlTitle = message.urlTitle;
-        if(!urlTitle){
-            urlTitle = url;
-        }
-        var value = message.num;
-
-        var empTable = document.getElementById('empTable');
-        var rowCount = empTable.rows.length;
-        var tr = empTable.insertRow(rowCount);
-
-        var td = document.createElement('td');
-
-
-        td = tr.insertCell(0);
-        //Create checkboxes for each hyperlinks
-        var check = document.createElement("INPUT");
-        check.setAttribute("type", "checkbox");
-        check.id = url;
-        td.appendChild(check);
-
-        td = tr.insertCell(1);
-        //Create label for each checkboxes for each hyperlinks
-        var label = document.createElement("a");
-        label.setAttribute('href', url);
-        label.setAttribute('style', "color:#0000FF;")
-        label.appendChild(document.createTextNode(urlTitle));
-        td.appendChild(label);
-
-
-        td = tr.insertCell(2);
-        var num = document.createElement('num');
-        num.innerText = value;
-        // num.id = value;
-        // num.setAttribute('type','number');
-        td.appendChild(num);
-
-
+        insertRow(url, urlTitle, occurrence);
         totalLinks += 1;
         // alert("SORT")
         var sort = document.createElement("BUTTON");
@@ -215,3 +146,34 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 
 })
+
+function insertRow(url, urlTitle, occurrence) {
+    var empTable = document.getElementById('empTable');
+    var rowCount = empTable.rows.length;
+    var row = empTable.insertRow(rowCount);
+
+    var cell = document.createElement('td');
+
+
+    cell = row.insertCell(0);
+    //Create checkboxes for each hyperlinks
+    var check = document.createElement("INPUT");
+    check.setAttribute("type", "checkbox");
+    check.id = url;
+    cell.appendChild(check);
+
+
+    cell = row.insertCell(1);
+    //Create label for each checkboxes for each hyperlinks
+    var label = document.createElement("a");
+    label.setAttribute('href', url);
+    label.setAttribute('style', "color:#0000FF;")
+    label.appendChild(document.createTextNode(urlTitle));
+    cell.appendChild(label);
+
+
+    cell = row.insertCell(2);
+    var num = document.createElement('num');
+    num.innerText = occurrence;
+    cell.appendChild(num);
+}

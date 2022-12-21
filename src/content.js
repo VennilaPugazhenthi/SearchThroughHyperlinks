@@ -87,7 +87,7 @@ function getCountFromLinks(hyperlinkMap, re) {
                     });
                     console.log("url: " + link + " num: " + count_appearence + " limit: " + hyperlinkMap.size);
                     chrome.runtime.sendMessage({
-                        url: this.responseURL.toString(),
+                        url: link,
                         urlTitle: linkText,
                         num: count_appearence.toString(),
                         limit: hyperlinkMap.size
@@ -95,13 +95,19 @@ function getCountFromLinks(hyperlinkMap, re) {
                 } else {
                     if (this.status == 403 || this.status == 404) {
                         chrome.runtime.sendMessage({
-                            url: this.responseURL.toString(),
+                            url: link,
                             urlTitle: linkText,
                             num: "0",
                             limit: hyperlinkMap.size
                         });
                     }else{
                         hyperlinkMap.delete(link);
+                        chrome.runtime.sendMessage({
+                            url: link,
+                            urlTitle: linkText,
+                            num: "0",
+                            limit: hyperlinkMap.size
+                        });
                     }
                 }
             }
@@ -110,6 +116,12 @@ function getCountFromLinks(hyperlinkMap, re) {
         xhr.ontimeout = () => {
             console.log("xhr timeout");
             hyperlinkMap.delete(link);
+            chrome.runtime.sendMessage({
+                url: link,
+                urlTitle: linkText,
+                num: "0",
+                limit: hyperlinkMap.size
+            });
         };
         xhr.send();
     }
