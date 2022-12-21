@@ -112,7 +112,6 @@ function getCountFromLinks(hyperlinkMap, re) {
             hyperlinkMap.delete(link);
         };
         xhr.send();
-
     }
 }
 
