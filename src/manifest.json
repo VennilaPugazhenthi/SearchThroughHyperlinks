@@ -2,7 +2,7 @@
   "name": "Search Through Hyperlinks",
   "version": "1.0.0",
   "manifest_version": 2,
-  "description": "Search a Word in all the Hyperlinks in a particular URL!",
+  "description": "Search a Word in all the Hyperlinks in the current web page!",
   "icons": {
     "16": "clip16bottom.png",
     "32": "clip32bottom.png",
