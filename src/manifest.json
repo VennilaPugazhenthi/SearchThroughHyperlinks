@@ -1,13 +1,21 @@
 {
   "name": "Search Through Hyperlinks",
   "version": "1.0.0",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "description": "Search a Word in all the Hyperlinks in the current web page!",
+  "action": {
+    "default_icon": {
+      "150": "icons/clip150bottom.png"
+    },
+    "default_title": "Search Through Hyperlinks",
+    "default_popup": "popup.html"
+  },
   "icons": {
-    "16": "clip16bottom.png",
-    "32": "clip32bottom.png",
-    "48": "clip48bottom.png",
-    "128": "clip128bottom.png"
+    "16": "icons/clip16bottom.png",
+    "32": "icons/clip32bottom.png",
+    "48": "icons/clip48bottom.png",
+    "128": "icons/clip128bottom.png",
+    "150": "icons/clip150bottom.png"
   },
   "content_scripts": [
     {
@@ -15,17 +23,11 @@
       "js": ["content.js"]
     }
   ],
-  "browser_action": {
-    "default_icon": "clip150bottom.png",
-    "default_title": "Search Through Hyperlinks",
-    "default_popup": "popup.html"
-  },
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "service_worker": "background.js"
   },
-  "permissions": ["tabs",
-    "https://*/",
+  "permissions": [
+    "tabs",
     "webNavigation"
   ]
 }

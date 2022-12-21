@@ -69,46 +69,50 @@ function getCountFromLinks(hyperlinkMap, re) {
         xhr.open("GET", link, true);
         xhr.timeout = 1500;
         xhr.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var response = this.responseText;
+            if (this.readyState == 4) {
 
-                var parse = new DOMParser();
+                if (this.status == 200) {
+                    var response = this.responseText;
 
-                var html_new = parse.parseFromString(response, 'text/html');
+                    var parse = new DOMParser();
 
-                var count_appearence = 0;
-                //Find all text nodes, and add their parents to a list
-                recursiveFindTextNodes(0, html_new.body, function (parent, node) {
-                    if (node.data.match(re)) {
-                        count_appearence++;
+                    var html_new = parse.parseFromString(response, 'text/html');
+
+                    var count_appearence = 0;
+                    //Find all text nodes, and add their parents to a list
+                    recursiveFindTextNodes(0, html_new.body, function (parent, node) {
+                        if (node.data.match(re)) {
+                            count_appearence++;
+                        }
+                    });
+                    console.log("url: " + link + " num: " + count_appearence + " limit: " + hyperlinkMap.size);
+                    chrome.runtime.sendMessage({
+                        url: this.responseURL.toString(),
+                        urlTitle: linkText,
+                        num: count_appearence.toString(),
+                        limit: hyperlinkMap.size
+                    });
+                } else {
+                    if (this.status == 403 || this.status == 404) {
+                        chrome.runtime.sendMessage({
+                            url: this.responseURL.toString(),
+                            urlTitle: linkText,
+                            num: "0",
+                            limit: hyperlinkMap.size
+                        });
+                    }else{
+                        hyperlinkMap.delete(link);
                     }
-                });
-
-                chrome.runtime.sendMessage({
-                    url: this.responseURL.toString(),
-                    urlTitle: linkText,
-                    num: count_appearence.toString(),
-                    limit: hyperlinkMap.size
-                }, function (response) {
-                    console.log(response);
-                });
-            }
-
-            if (this.status == 403 || this.status == 404) {
-                chrome.runtime.sendMessage({
-                    url: this.responseURL.toString(),
-                    urlTitle: linkText,
-                    num: "0",
-                    limit: hyperlinkMap.size
-                }, function (response) {
-                    console.log(response);
-                });
+                }
             }
         }
+
         xhr.ontimeout = () => {
+            console.log("xhr timeout");
             hyperlinkMap.delete(link);
         };
         xhr.send();
+
     }
 }
 
