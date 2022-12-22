@@ -72,7 +72,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         document.body.appendChild(sort);
         sort.onclick = function sorting() {
             var table, rows, switching, i, x, y, shouldSwitch;
-            table = document.getElementById('empTable');
+            table = document.getElementById('displayTable');
             switching = true;
 
             while (switching) {
@@ -110,13 +110,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
         document.body.appendChild(go);
         //A function to save all the checked hyperlinks to an array
         go.onclick = function respond() {
-            // var container=document.getElementById("container");
 
-            var grid = document.getElementById('empTable');
+            var grid = document.getElementById('displayTable');
             var checklist = grid.getElementsByTagName("INPUT");
-            // var checklist=container.children;
 
-            // var total = totalLinks*3;
             var total = totalLinks;
 
             var checkboxesChecked = [];         //Saves all the checked hyperlinks
@@ -130,8 +127,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
                 }
             }
             //Opens the checked hyperlinks
-            var windowCreated = 0;
-            var windowCreatedID;
             for (var k = 0; k < num_clicked_links; k++) {
                 //Opens the checked hyperlinks in new tabs in same window
                 chrome.tabs.create({url: checkboxesChecked[k]});

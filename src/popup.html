@@ -4,32 +4,45 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <style>
-        html{
-            min-height: 35px;
-            min-width: 230px;
+        html {
+            min-height: 60px;
+            min-width: 300px;
             padding: 1px;
-        }
-        mark{
-            background-color: yellow;
-            color: black;
-        }
-        table{
-            border-collapse: collapse;
-            width: 100%;
-        }
-        table,td,th{
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th,td{
-            padding: 5px;
-        }
-        #search{
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        #current_appearance{
+
+        mark {
+            background-color: yellow;
+            color: black;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table, td, th {
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 5px;
+        }
+
+        #search {
+            width: auto;
+            height: auto;
+            padding: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        #current_appearance {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -46,7 +59,6 @@
 </div>
 <div id="current_appearance"></div>
 
-<p id="container"></p>
 <table id="displayTable"></table>
 
 

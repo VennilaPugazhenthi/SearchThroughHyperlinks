@@ -123,7 +123,7 @@ function getCountFromLinks(hyperlinkMap, re) {
                 limit: hyperlinkMap.size
             });
         };
-        xhr.send();
+        xhr.send(null);
     }
 }
 
