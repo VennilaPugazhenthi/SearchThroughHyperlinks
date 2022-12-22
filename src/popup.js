@@ -23,18 +23,13 @@ function onClick() {
 function createTable() {
     //Table Headers
     var tableHeader = ['', 'Hyperlinks', 'Appearances'];
-    var empTable = document.createElement('table');
-    empTable.setAttribute('id', 'empTable');
-    empTable.id = 'empTable';
-
-    var tr = empTable.insertRow(-1);
-    for (var h = 0; h < tableHeader.length; h++) {
-        var th = document.createElement('th');
-        th.innerHTML = tableHeader[h];
-        tr.appendChild(th);
+    var table = document.getElementById('displayTable');
+    var headerRow = table.insertRow(-1);
+    for (var i = 0; i < tableHeader.length; i++) {
+        var headerCell = document.createElement('th');
+        headerCell.innerHTML = tableHeader[i];
+        headerRow.appendChild(headerCell);
     }
-    var div = document.getElementById('displayTable');
-    div.appendChild(empTable);
 }
 
 function setCount(res) {
@@ -148,9 +143,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 })
 
 function insertRow(url, urlTitle, occurrence) {
-    var empTable = document.getElementById('empTable');
-    var rowCount = empTable.rows.length;
-    var row = empTable.insertRow(rowCount);
+    var table = document.getElementById('displayTable');
+    var rowCount = table.rows.length;
+    var row = table.insertRow(rowCount);
 
     var cell = document.createElement('td');
 
